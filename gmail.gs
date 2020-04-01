@@ -5,7 +5,6 @@
  *　　 Cf.https://qiita.com/kazinoue/items/1e8ed4aebfb5c3c886db
  * ********************************************************************************** */
 
-
 //Cf. 佐々木さん記述コード
 var fileid = "15VepwALaweBw9JXID1YGolVVrGBXP70Ru_WPfDlHAbY";
 var SearchString = "subject:お得婚.net☆結婚式プレゼント☆お申込みがありました";
