@@ -32,6 +32,15 @@ function sendMessageTest() {
 }
 
 
+//▼ 自動実行するトリガー作成
+function setTrigger(){
+  var setTime = new Date();
+  setTime.setHours(10);
+  setTime.setMinutes(00); 
+  ScriptApp.newTrigger('{関数名}').timeBased().at(setTime).create();
+}
+
+
 //▼ [GJK]ChatWorkBot all
 function cwFromGA() {
 //  var mySS=SpreadsheetApp.getActiveSpreadsheet(); //スプレッドシートを取得
@@ -67,26 +76,31 @@ function cwFromGA() {
 
 //▼ [GJK]ChatworkBot Owend
 function cwFromGAOwend(){
-  //　designation　google sheet
-//  var mySS = SpreadsheetApp.openById("1EfZB3sVkutkdToMXzD8jJluUVrMaoYhJRB5IwVwPhrc");
-//  var sheetDaily=mySS.getSheetByName("ga_cwbot_owend");
-  
   var mySS = SpreadsheetApp.openById("1EfZB3sVkutkdToMXzD8jJluUVrMaoYhJRB5IwVwPhrc");
-  var sheetDaily = mySS.getSheetByName("ga_cwbot_all");
+  
+  var sheetDaily = mySS.getSheetByName("ga_cwbot_owned");
   var rowDaily = sheetDaily.getDataRange().getLastRow();
   var yDate = sheetDaily.getRange(rowDaily,1).getValue();
   
   //　get data you wont
-  var strBody = "[toall]" + "\n" + "[info][title]アクセス報告　"
-      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "(昨日)　【終活スタイル】のアクセス数でーす！ by 🐧" + "[/title]" +
-        "ユーザー        : "
-      + sheetDaily.getRange(rowDaily,2).getValue() +
-        "  (新規ユーザー : "
-      + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n" +
-        "[hr]" +　"ページビュー : "
-      + sheetDaily.getRange(rowDaily,4).getValue() + "\n" +
-        "[hr]" +　"セッション     : "
-      + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]";
+  var strBody = "[toall]" + "\n" + "[info][title] 【終活スタイル】前日アクセス報告　"
+      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n" +
+        "ユーザー        : " + sheetDaily.getRange(rowDaily,2).getValue() + "  (新規ユーザー : " + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n"
+      + "[hr]"
+      + "ページビュー : " + sheetDaily.getRange(rowDaily,4).getValue() + "\n"
+      + "[hr]" 
+      + "セッション     : " + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]" + "\n";
+
+   //　get data you wont -vol2(owend page ranking)
+   strBody = strBody + "[info][title] 記事別PV数ランキングTOP10👑（※PV数当月累積） [/title]" + "\n";
+   var sheetPost = mySS.getSheetByName("ga_cwbot_owned_ranking");
+  
+//   for(var i=1;i<=10;i++){
+//     // [1]{{記事タイトル}}：{{PV数}}
+//     strBody = strBody + "[" + i + "] " + sheetPost.getRange(i+15,1).getValue() + "：" + sheetPost.getRange(i+15,3).getValue() + "PV" + "\n";
+//   }
+  
+  strBody = strBody + "{{ ⚠ 開発中}}[/info]" + "※　こちらの報告はBotによる投稿です。";
   
   //　send message to Chatwork
   var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});
@@ -94,13 +108,5 @@ function cwFromGAOwend(){
     room_id: 182163803,
     body: strBody
   });
+//  cwClient.sendMessageToMyChat(strBody);//（テスト）個人チャットに送信
 }
-
-
-//自動実行するトリガー作成
-//function setTrigger(){
-//  var setTime = new Date();
-//  setTime.setHours(10);
-//  setTime.setMinutes(00); 
-//  ScriptApp.newTrigger('cwFromGA').timeBased().at(setTime).create();
-//}
