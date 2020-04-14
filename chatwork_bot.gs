@@ -95,12 +95,12 @@ function cwFromGAOwend(){
    strBody = strBody + "[info][title] 記事別PV数ランキングTOP10👑（※PV数当月累積） [/title]" + "\n";
    var sheetPost = mySS.getSheetByName("ga_cwbot_owned_ranking");
   
-//   for(var i=1;i<=10;i++){
-//     // [1]{{記事タイトル}}：{{PV数}}
-//     strBody = strBody + "[" + i + "] " + sheetPost.getRange(i+15,1).getValue() + "：" + sheetPost.getRange(i+15,3).getValue() + "PV" + "\n";
-//   }
+   for(var i=1;i<=10;i++){
+     // [1]{{記事タイトル}}：{{PV数}}
+     strBody = strBody + "[" + i + "] " + sheetPost.getRange(i+15,1).getValue() + "：" + sheetPost.getRange(i+15,3).getValue() + "PV" + "\n";
+   }
   
-  strBody = strBody + "{{ ⚠ 開発中}}[/info]" + "※　こちらの報告はBotによる投稿です。";
+  strBody = strBody + "[/info]" + "※　こちらの報告はBotによる投稿です。";
   
   //　send message to Chatwork
   var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});
