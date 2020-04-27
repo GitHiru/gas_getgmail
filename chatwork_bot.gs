@@ -9,27 +9,27 @@
  *        https://tonari-it.com/gas-library/
  * ******************************************************************************** */
 
-//▼ statement plactice
-function myfunction(){
-  console.log("Helllo");
-}
-
-
-//▼ ChatWorkAPI連携テスト（個人チャットに書き込み）
-function testMessage(){
-  var cw = ChatWorkClient.factory({token:'c193e0b11fd0c4e5281859a73e1fd795'});
-  var body = "テストだよ！🐧";
-  cw.sendMessageToMyChat(body);
-}
-
-
-//▼ ChatWorkAPI連携テスト（グループチャットに書き込み）
-function sendMessageTest() { 
-  var client = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});　//チャットワークAPI
-  client.sendMessage({
-    room_id:148285064, //ルームID #!rid148285064
-    body: 'チャットワークにメッセージを表示するテスト🐧'});
-}
+////▼ statement plactice
+//function myfunction(){
+//  console.log("Helllo");
+//}
+//
+//
+////▼ ChatWorkAPI連携テスト（個人チャットに書き込み）
+//function testMessage(){
+//  var cw = ChatWorkClient.factory({token:'c193e0b11fd0c4e5281859a73e1fd795'});
+//  var body = "テストだよ！🐧";
+//  cw.sendMessageToMyChat(body);
+//}
+//
+//
+////▼ ChatWorkAPI連携テスト（グループチャットに書き込み）
+//function sendMessageTest() { 
+//  var client = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});　//チャットワークAPI
+//  client.sendMessage({
+//    room_id:148285064, //ルームID #!rid148285064
+//    body: 'チャットワークにメッセージを表示するテスト🐧'});
+//}
 
 
 //▼ 自動実行するトリガー作成
@@ -43,13 +43,10 @@ function setTrigger(){
 
 //▼ [GJK]ChatWorkBot all
 function cwFromGA() {
-//  var mySS=SpreadsheetApp.getActiveSpreadsheet(); //スプレッドシートを取得
-  var mySS = SpreadsheetApp.openById("1EfZB3sVkutkdToMXzD8jJluUVrMaoYhJRB5IwVwPhrc"); //スプレッドシートを取得
-  var sheetDaily=mySS.getSheetByName("ga_cwbot_all"); //個別シートを取得
-
-  var rowDaily=sheetDaily.getDataRange().getLastRow(); //使用範囲のうち最終行を取得 
-
-  var yDate = sheetDaily.getRange(rowDaily,1).getValue();
+  var mySS       = SpreadsheetApp.openById("1EfZB3sVkutkdToMXzD8jJluUVrMaoYhJRB5IwVwPhrc"); //スプレッドシートを取得
+  var sheetDaily = mySS.getSheetByName("ga_cwbot_all"); //個別シートを取得
+  var rowDaily   = sheetDaily.getDataRange().getLastRow(); //使用範囲のうち最終行を取得 
+  var yDate      = sheetDaily.getRange(rowDaily,1).getValue();
  
   // チャットワークに送る文字列を生成
   var strBody = "[toall]" + "\n" + "[info][title]アクセス報告　"
@@ -62,15 +59,36 @@ function cwFromGA() {
       + sheetDaily.getRange(rowDaily,4).getValue() + "\n" + //ga:pageviews
         "[hr]" +　"セッション     : "
       + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]"; //ga:sessions
-  
-  
+
+ 
   // チャットワークにメッセージを送る
-  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
-  cwClient.sendMessage({
-    room_id: 148285064, //ルームID
-    body: strBody
-  });
-//  cwClient.sendMessageToMyChat(strBody);//（テスト）個人チャットに送信
+//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
+//  cwClient.sendMessage(
+//    {room_id: 148285064, body: strBody} //「ごじょくる」
+//  );
+
+  
+  
+  // (ADrim) チャットワークに送る文字列を生成
+  //https://docs.google.com/spreadsheets/d/15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI/edit#gid=0
+  var adSS     = SpreadsheetApp.openById("15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI");
+  var adDaily  = adSS.getSheetByName("2020年4月");
+  var rowDaily = adDaily.getDataRange().getLastRow(); //（更新）最終行取得
+  var strBody2 = strBody + 
+    "[info][title] 運用型広告報告 [/title]" + 
+      " 消化予算 ：" + adDaily.getRange(rowDaily,3).getValue() +
+      " 獲得件数 :" + adDaily.getRange(rowDaily,4).getValue() + "[/info]"+
+    "[info][title] アフィリエイト広告報告 [/title]" +
+      " 成果報酬金額予測 ：" + adDaily.getRange(rowDaily,5).getValue() +
+      " 獲得件数 :" + adDaily.getRange(rowDaily,6).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。";
+  
+console.log("hello");  
+  // チャットワークにメッセージを送る
+//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
+//  cwClient.sendMessage(
+//    {room_id: 74269449, body: strBody2} //「Hershe ＆ ADrim Gr」
+//  );
+
 }
 
 
