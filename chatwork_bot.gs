@@ -49,8 +49,8 @@ function cwFromGA() {
   var yDate      = sheetDaily.getRange(rowDaily,1).getValue();
  
   // チャットワークに送る文字列を生成
-  var strBody = "[toall]" + "\n" + "[info][title]アクセス報告　"
-      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "(昨日)　【ごじょクル全体】のアクセス数でーす！ by 🐧" + "[/title]" +  //ga:date
+  var strBody = "[toall]" + "\n" + "[info][title]【ごじょクル】アクセス全体報告（前日）　"
+      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd')  + "[/title]" +  //ga:date
         "ユーザー        : "
       + sheetDaily.getRange(rowDaily,2).getValue() + //ga:users
         "  (新規ユーザー : "
@@ -58,36 +58,37 @@ function cwFromGA() {
         "[hr]" +　"ページビュー : "
       + sheetDaily.getRange(rowDaily,4).getValue() + "\n" + //ga:pageviews
         "[hr]" +　"セッション     : "
-      + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]"; //ga:sessions
+      + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。"; //ga:sessions
 
  
   // チャットワークにメッセージを送る
-//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
-//  cwClient.sendMessage(
-//    {room_id: 148285064, body: strBody} //「ごじょくる」
-//  );
+  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
+  cwClient.sendMessage(
+    {room_id: 148285064, body: strBody} //「ごじょくる」
+  );
 
   
   
-  // (ADrim) チャットワークに送る文字列を生成
-  //https://docs.google.com/spreadsheets/d/15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI/edit#gid=0
-  var adSS     = SpreadsheetApp.openById("15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI");
-  var adDaily  = adSS.getSheetByName("2020年4月");
-  var rowDaily = adDaily.getDataRange().getLastRow(); //（更新）最終行取得
-  var strBody2 = strBody + 
-    "[info][title] 運用型広告報告 [/title]" + 
-      " 消化予算 ：" + adDaily.getRange(rowDaily,3).getValue() +
-      " 獲得件数 :" + adDaily.getRange(rowDaily,4).getValue() + "[/info]"+
-    "[info][title] アフィリエイト広告報告 [/title]" +
-      " 成果報酬金額予測 ：" + adDaily.getRange(rowDaily,5).getValue() +
-      " 獲得件数 :" + adDaily.getRange(rowDaily,6).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。";
+//  // (ADrim) チャットワークに送る文字列を生成
+//  //https://docs.google.com/spreadsheets/d/15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI/edit#gid=0
+//  var adSS     = SpreadsheetApp.openById("15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI");
+//  var adDaily  = adSS.getSheetByName("2020年4月");
+//  var rowDaily2 = adDaily.getDataRange(2).getLastRow();
+//  var strBody2 = strBody + "\n\n" +
+//    "[info][title] 運用型広告報告 [/title]" + 
+//      " 消化予算 ：" + adDaily.getRange(rowDaily2,3).getValue() +
+//      " 獲得件数 :" + adDaily.getRange(rowDaily2,4).getValue() + "[/info]"+
+//    "[info][title] アフィリエイト広告報告 [/title]" +
+//      " 成果報酬金額予測 ：" + adDaily.getRange(rowDaily2,5).getValue() +
+//      " 獲得件数 :" + adDaily.getRange(rowDaily2,6).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。";
+
   
-console.log("hello");  
   // チャットワークにメッセージを送る
-//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
-//  cwClient.sendMessage(
-//    {room_id: 74269449, body: strBody2} //「Hershe ＆ ADrim Gr」
-//  );
+  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
+  cwClient.sendMessage(
+    {room_id: 74269449, body: strBody} //「Hershe ＆ ADrim Gr」
+  );
+//  cwClient.sendMessageToMyChat(strBody2);
 
 }
 
@@ -127,4 +128,100 @@ function cwFromGAOwend(){
     body: strBody
   });
 //  cwClient.sendMessageToMyChat(strBody);//（テスト）個人チャットに送信
+}
+
+
+
+
+
+
+
+
+//▼ [OTC]ChatworkBot LP
+function otcBot(){
+  var mySS = SpreadsheetApp.openById("16nWrrg6alfmq2168KrGgJkwAJ9wrCKd5PGLlhkmSskI");
+
+  
+  var lpDaily_st = mySS.getSheetByName("cw_lp_standard");   
+  var rowDaily = lpDaily_st.getDataRange().getLastRow();
+  var yDate = lpDaily_st.getRange(rowDaily,1).getValue();
+  var strBody = "[toall]" + "\n\n"
+      + "💎【お得婚LP施策】前日アクセス報告" + "(" +Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + ")" + "\n\n"
+      + "[info][title] 通常 LP [/title]" + "\n"
+      + "　　ページビュー　　　　: " + lpDaily_st.getRange(rowDaily,2).getValue() + "\n"
+      + "[hr]"
+      + "　　セッション　　　　　: " + lpDaily_st.getRange(rowDaily,3).getValue() + "\n"
+      + "[hr]" 
+      + "　　コンバージョン　　　: " + lpDaily_st.getRange(rowDaily,4).getValue() + "[/info]" + "\n";
+
+ 
+  var lpDaily_ho = mySS.getSheetByName("cw_lp_hokkaido"); 
+  var rowDaily = lpDaily_ho.getDataRange().getLastRow();
+  var yDate = lpDaily_ho.getRange(rowDaily,1).getValue();
+  strBody = strBody
+      + "[info][title] 北海道 LP [/title]" + "\n"
+      + "　　ページビュー　　　　: " + lpDaily_ho.getRange(rowDaily,2).getValue() + "\n"
+      + "[hr]"
+      + "　　セッション　　　　　: " + lpDaily_ho.getRange(rowDaily,3).getValue() + "\n"
+      + "[hr]" 
+      + "　　コンバージョン　　　: " + lpDaily_ho.getRange(rowDaily,4).getValue() + "[/info]" + "\n";
+  
+  
+  var lpDaily_fa = mySS.getSheetByName("cw_lp_family"); 
+  var rowDaily = lpDaily_fa.getDataRange().getLastRow();
+  var yDate = lpDaily_fa.getRange(rowDaily,1).getValue();
+  strBody = strBody
+      + "[info][title] パパママ LP [/title]" + "\n"
+      + "　　ページビュー　　　　: " + lpDaily_fa.getRange(rowDaily,2).getValue() + "\n"
+      + "[hr]"
+      + "　　セッション　　　　　: " + lpDaily_fa.getRange(rowDaily,3).getValue() + "\n"
+      + "[hr]" 
+      + "　　コンバージョン　　　: " + lpDaily_fa.getRange(rowDaily,4).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。";
+  
+  
+  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});
+  cwClient.sendMessage({
+    room_id: 65572941,
+    body: strBody
+  });
+  
+//  cwClient.sendMessageToMyChat(strBody); //test
+  
+  
+  
+  
+  /*
+   *　｛｛開発中｝｝
+   */
+//  var mySS = SpreadsheetApp.openById("16nWrrg6alfmq2168KrGgJkwAJ9wrCKd5PGLlhkmSskI");
+//  var ssName = ["cw_lp_standard","cw_lp_hokkaido","cw_lp_family"];
+//  var len = ssName.length;
+//  
+//  for(var i=0; i<=len; i++){
+//    
+//    var ssData = mySS.getSheetByName(ssName[i]);
+//    
+//    for(var j=0; j<=ssData; j++){
+//       
+//      var rowDaily = ssData.getDataRange().getLastRow();
+//      var yDate = ssData.getRange(rowDaily,1).getValue();
+//      
+//      var strBody =
+//          if(j===0){
+//              "[toall]" + "\n"
+//            + "【お得婚LP施策】前日アクセス報告" + "\n\n"
+//          }
+//        + "[info][title]"+ ssData.getName() + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n"
+//        + "ユーザー        : " + ssData.getRange(rowDaily,2).getValue() + "  (新規ユーザー : " + ssData.getRange(rowDaily,3).getValue() + ")" + "\n"
+//        + "[hr]"
+//        + "ページビュー : " + ssData.getRange(rowDaily,4).getValue() + "\n"
+//        + "[hr]" 
+//        + "セッション     : " + ssData.getRange(rowDaily,5).getValue() + "[/info]" + "\n";
+//      
+//      return
+//    }   
+//  }
+
+  
+
 }
