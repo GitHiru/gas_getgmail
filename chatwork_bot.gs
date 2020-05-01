@@ -102,13 +102,14 @@ function cwFromGAOwend(){
   var yDate = sheetDaily.getRange(rowDaily,1).getValue();
   
   //　get data you wont
-  var strBody = "[toall]" + "\n" + "[info][title] 【終活スタイル】前日アクセス報告　"
-      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n" +
-        "ユーザー        : " + sheetDaily.getRange(rowDaily,2).getValue() + "  (新規ユーザー : " + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n"
+  var strBody = "[toall]" + "\n"
+      + "[info][title] 【終活スタイル】前日アクセス報告　"
+      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n"
+      + " ユーザー        : " + sheetDaily.getRange(rowDaily,2).getValue() + "  (新規ユーザー : " + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n"
       + "[hr]"
-      + "ページビュー : " + sheetDaily.getRange(rowDaily,4).getValue() + "\n"
+      + " ページビュー : " + sheetDaily.getRange(rowDaily,4).getValue() + "\n"
       + "[hr]" 
-      + "セッション     : " + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]" + "\n";
+      + " セッション     : " + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]" + "\n";
 
   //　get data you wont -vol2(owend page ranking)
   strBody = strBody + "[info][title] 記事別PV数ランキングTOP10👑（※PV数当月累積） [/title]" + "\n";
@@ -196,32 +197,34 @@ function otcBot(){
 //  var mySS = SpreadsheetApp.openById("16nWrrg6alfmq2168KrGgJkwAJ9wrCKd5PGLlhkmSskI");
 //  var ssName = ["cw_lp_standard","cw_lp_hokkaido","cw_lp_family"];
 //  var len = ssName.length;
+//  var res ="";
 //  
 //  for(var i=0; i<=len; i++){
 //    
 //    var ssData = mySS.getSheetByName(ssName[i]);
 //    
-//    for(var j=0; j<=ssData; j++){
-//       
-//      var rowDaily = ssData.getDataRange().getLastRow();
-//      var yDate = ssData.getRange(rowDaily,1).getValue();
+//    var rowDaily = ssData.getDataRange().getLastRow();
+//    var yDate = ssData.getRange(rowDaily,1).getValue();
 //      
-//      var strBody =
-//          if(j===0){
-//              "[toall]" + "\n"
-//            + "【お得婚LP施策】前日アクセス報告" + "\n\n"
-//          }
-//        + "[info][title]"+ ssData.getName() + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n"
-//        + "ユーザー        : " + ssData.getRange(rowDaily,2).getValue() + "  (新規ユーザー : " + ssData.getRange(rowDaily,3).getValue() + ")" + "\n"
-//        + "[hr]"
-//        + "ページビュー : " + ssData.getRange(rowDaily,4).getValue() + "\n"
-//        + "[hr]" 
-//        + "セッション     : " + ssData.getRange(rowDaily,5).getValue() + "[/info]" + "\n";
-//      
-//      return
-//    }   
+//    var strBody =
+////          if(j===0){
+////              "[toall]" + "\n"
+////            + "【お得婚LP施策】前日アクセス報告" + "\n\n"
+////          }
+//        "[info][title]"+ ssData.getName() + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd') + "[/title]" + "\n"
+//      + "　　ページビュー　　　　: " + ssData.getRange(rowDaily,2).getValue() + "\n"
+//      + "[hr]"
+//      + "　　セッション　　　　　: " + ssData.getRange(rowDaily,3).getValue() + "\n"
+//      + "[hr]" 
+//      + "　　コンバージョン　　　: " + ssData.getRange(rowDaily,4).getValue() + "[/info]" + "\n";
+//    
+//    return(res);
 //  }
-
-  
-
+//  
+//  console.log(res);
+//  
+//    
+//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'});
+//  cwClient.sendMessageToMyChat(strBody); //test
+    
 }
