@@ -1,3 +1,4 @@
+
 /* ***********************************************************************************
  *　□ GA → [ Gsheet → Chatwork ]　アクセスデータ共有Bot 
  *
@@ -49,26 +50,62 @@ function cwFromGA() {
   var yDate      = sheetDaily.getRange(rowDaily,1).getValue();
  
   // チャットワークに送る文字列を生成
-  var strBody = "[toall]" + "\n" + "[info][title]【ごじょクル】アクセス全体報告（前日）　"
-      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd')  + "[/title]" +  //ga:date
-        "ユーザー        : "
-      + sheetDaily.getRange(rowDaily,2).getValue() + //ga:users
-        "  (新規ユーザー : "
-      + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n" + //ga:newUsers
-        "[hr]" +　"ページビュー : "
-      + sheetDaily.getRange(rowDaily,4).getValue() + "\n" + //ga:pageviews
-        "[hr]" +　"セッション     : "
-      + sheetDaily.getRange(rowDaily,5).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。"; //ga:sessions
-
- 
+  // 前日差分を視認条件分岐（PV/SS）
+  var pvDif = sheetDaily.getRange(rowDaily-1,4).getValue();
+  var ssDif = sheetDaily.getRange(rowDaily-1,5).getValue();
+  var pv    = sheetDaily.getRange(rowDaily,4).getValue();
+  var ss    = sheetDaily.getRange(rowDaily,5).getValue();
+  
+  var pvVal = pv - pvDif;
+  if ( pvVal >= 0 ){
+    pvVal = "➚";
+  } else{
+    pvVal = "➘";
+  }
+  
+  var ssVal = ss - ssDif;
+  if ( ssVal >= 0 ){
+    ssVal = "➚";
+  } else{
+    ssVal = "➘";
+  }
+  
+  var pvGrow = Math.ceil(((pv-pvDif)/pv * 100)*10)/10 + "%";
+  var ssGrow = Math.ceil(((ss-ssDif)/pv * 100)*10)/10 + "%";  
+  
+  var strBody = "[toall]" + "\n" 
+      + "[info][title]【ごじょクル】アクセス全体報告（前日）　"
+      + Utilities.formatDate(yDate, 'JST', 'yyyy/MM/dd')  + "[/title]"
+      + "　ユーザー        : "
+      + sheetDaily.getRange(rowDaily,2).getValue()
+      + "  (新規 : "
+      + sheetDaily.getRange(rowDaily,3).getValue() + ")" + "\n"
+      + "[hr]" 
+      + "　ページビュー : " + pv + " " + pvVal + " (前日比：" + pvGrow + ")" + "\n" 
+      + "[hr]" 
+      + "　セッション     : " + ss + " " + ssVal + " (前日比：" + ssGrow + ")";
+  
+  strBody = strBody + "[/info]";
+  
+  strBody = strBody + "\n"
+  + "[info][title]　デイリー獲得（📃=資料請求 👥=見積もり、仮入会）[/title]"
+  + "互助会　　:" + "📃[" + sheetDaily.getRange(rowDaily,6).getValue() +"] " + "👥[" + sheetDaily.getRange(rowDaily,7).getValue() +"]" + "\n"
+  + "[hr]"
+  + "葬儀場　　:" + "📃[" + sheetDaily.getRange(rowDaily,8).getValue() +"] " + "👥[" + sheetDaily.getRange(rowDaily,9).getValue() +"]" + "\n"
+  + "[hr]"
+  + "結婚式場　:" + "📃[" + sheetDaily.getRange(rowDaily,10).getValue() +"] " + "👥[" + sheetDaily.getRange(rowDaily,11).getValue() +"]" ;
+  
+  strBody = strBody + "[/info]" + "※　こちらの報告はBotによる投稿です。";
+  
+  
   // チャットワークにメッセージを送る
   var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
-  cwClient.sendMessage(
-    {room_id: 148285064, body: strBody} //「ごじょくる」
-  );
+//  cwClient.sendMessage(
+//    {room_id: 148285064, body: strBody} //「ごじょくる」
+//  );
+  cwClient.sendMessageToMyChat(strBody);
 
-  
-  
+
 //  // (ADrim) チャットワークに送る文字列を生成
 //  //https://docs.google.com/spreadsheets/d/15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI/edit#gid=0
 //  var adSS     = SpreadsheetApp.openById("15qzgLaaN7XWHgudWVyLkyl9QSQl_UqRy07iVZJJUFpI");
@@ -83,13 +120,11 @@ function cwFromGA() {
 //      " 獲得件数 :" + adDaily.getRange(rowDaily2,6).getValue() + "[/info]" + "※　こちらの報告はBotによる投稿です。";
 
   
-  // チャットワークにメッセージを送る
-  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
-  cwClient.sendMessage(
-    {room_id: 74269449, body: strBody} //「Hershe ＆ ADrim Gr」
-  );
-//  cwClient.sendMessageToMyChat(strBody2);
-
+//  //チャットワークにメッセージを送る
+//  var cwClient = ChatWorkClient.factory({token: 'c193e0b11fd0c4e5281859a73e1fd795'}); //チャットワークAPI
+//  cwClient.sendMessage(
+//    {room_id: 74269449, body: strBody} //「Hershe ＆ ADrim Gr」
+//  );
 }
 
 
@@ -128,7 +163,6 @@ function cwFromGAOwend(){
     room_id: 182163803,
     body: strBody
   });
-//  cwClient.sendMessageToMyChat(strBody);//（テスト）個人チャットに送信
 }
 
 
@@ -160,7 +194,7 @@ function otcBot(){
   var rowDaily = lpDaily_ho.getDataRange().getLastRow();
   var yDate = lpDaily_ho.getRange(rowDaily,1).getValue();
   strBody = strBody
-      + "[info][title] 北海道 LP [/title]" + "\n"
+      + "[info][title] 北海道 LP  [/title]" + "\n"
       + "　　ページビュー　　　　: " + lpDaily_ho.getRange(rowDaily,2).getValue() + "\n"
       + "[hr]"
       + "　　セッション　　　　　: " + lpDaily_ho.getRange(rowDaily,3).getValue() + "\n"
